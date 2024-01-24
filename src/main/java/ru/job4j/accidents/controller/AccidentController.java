@@ -39,8 +39,11 @@ public class AccidentController {
     }
 
     @PostMapping("/updateAccident")
-    public String update(@ModelAttribute Accident accident) {
-        simpleAccidentService.update(accident);
+    public String update(@ModelAttribute Accident accident, Model model) {
+        if (!simpleAccidentService.update(accident)) {
+            model.addAttribute("message", "Инцидент с указанным идентификатором изменить не удалось");
+            return "errors/404";
+        }
         return "redirect:/index";
     }
 }
