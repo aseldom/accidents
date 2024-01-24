@@ -10,12 +10,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
-public class AccidentMemRepository implements AccidentRepository {
+public class MemoryAccidentRepository implements AccidentRepository {
 
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
     private final AtomicInteger atomicInt = new AtomicInteger(1);
 
-    private AccidentMemRepository() {
+    private MemoryAccidentRepository() {
         add(new Accident(1, "Name 1", "Text 1", "Address 1"));
         add(new Accident(1, "Name 2", "Text 2", "Address 2"));
         add(new Accident(1, "Name 3", "Text 3", "Address 3"));

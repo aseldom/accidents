@@ -3,42 +3,57 @@ package ru.job4j.accidents.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.service.SimpleAccidentService;
 
+import java.util.Optional;
+
 @Controller
 @AllArgsConstructor
+@RequestMapping("/accidents")
 public class AccidentController {
 
     private final SimpleAccidentService simpleAccidentService;
 
-    @GetMapping("/createAccident")
+    /**
+     * Страница создания инцидента
+     */
+    @GetMapping("createAccident")
     public String viewCreateAccident() {
-        return "createAccident";
+        return "accidents/createAccident";
     }
 
-    @PostMapping("/saveAccident")
-    public String save(@ModelAttribute Accident accident) {
-        simpleAccidentService.add(accident);
+    /**
+     * Сохранение созданного инцидента
+     */
+    @PostMapping("saveAccident")
+    public String save(@ModelAttribute Accident accident, Model model) {
+        if (simpleAccidentService.add(accident) == null) {
+            model.addAttribute("message", "Инцидент добавить не удалось");
+            return "errors/404";
+        }
         return "redirect:/index";
     }
 
-    @GetMapping("/{id}")
-    public String getById(Model model, @PathVariable int id) {
-        var accidentOptional = simpleAccidentService.findById(id);
-        if (accidentOptional.isEmpty()) {
-            model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
+    /**
+     * Страница редактирования инцидента
+     */
+    @GetMapping("formUpdateAccident")
+    public String update(@RequestParam int id, Model model) {
+        Optional<Accident> optionalAccident = simpleAccidentService.findById(id);
+        if (optionalAccident.isEmpty()) {
+            model.addAttribute("message", "Инцидент не найден");
             return "errors/404";
         }
-        model.addAttribute("accident", accidentOptional.get());
-        return "editAccident";
+        model.addAttribute("accident", optionalAccident.get());
+        return "accidents/editAccident";
     }
 
-    @PostMapping("/updateAccident")
+    /**
+     * Обновление отредактированного инцидента
+     */
+    @PostMapping("updateAccident")
     public String update(@ModelAttribute Accident accident, Model model) {
         if (!simpleAccidentService.update(accident)) {
             model.addAttribute("message", "Инцидент с указанным идентификатором изменить не удалось");
