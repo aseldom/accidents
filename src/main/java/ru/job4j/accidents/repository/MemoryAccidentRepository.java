@@ -6,6 +6,7 @@ import ru.job4j.accidents.model.Accident;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,10 +17,20 @@ public class MemoryAccidentRepository implements AccidentRepository {
     private final AtomicInteger atomicInt = new AtomicInteger(1);
 
     public MemoryAccidentRepository() {
-        add(new Accident(1, "Name 1", "Text 1", "Address 1"));
-        add(new Accident(1, "Name 2", "Text 2", "Address 2"));
-        add(new Accident(1, "Name 3", "Text 3", "Address 3"));
-        add(new Accident(1, "Name 4", "Text 4", "Address 4"));
+        MemoryRuleRepository memoryRuleRepository = new MemoryRuleRepository();
+        MemoryAccidentTypeRepository memoryAccidentTypeRepository = new MemoryAccidentTypeRepository();
+        add(new Accident(1, "Name 1", "Text 1", "Address 1",
+                memoryAccidentTypeRepository.findById(1).get(),
+                Set.of(memoryRuleRepository.findById(1).get())));
+        add(new Accident(1, "Name 2", "Text 2", "Address 2",
+                memoryAccidentTypeRepository.findById(1).get(),
+                Set.of(memoryRuleRepository.findById(1).get())));
+        add(new Accident(1, "Name 3", "Text 3", "Address 3",
+                memoryAccidentTypeRepository.findById(1).get(),
+                Set.of(memoryRuleRepository.findById(1).get())));
+        add(new Accident(1, "Name 4", "Text 4", "Address 4",
+                memoryAccidentTypeRepository.findById(1).get(),
+                Set.of(memoryRuleRepository.findById(1).get())));
     }
 
     @Override
@@ -46,7 +57,9 @@ public class MemoryAccidentRepository implements AccidentRepository {
                         oldAccident.getId(),
                         accident.getName(),
                         accident.getText(),
-                        accident.getAddress()
+                        accident.getAddress(),
+                        accident.getType(),
+                        accident.getRules()
                 )
         ) != null;
     }
