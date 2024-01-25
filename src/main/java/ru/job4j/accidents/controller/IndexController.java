@@ -18,5 +18,4 @@ public class IndexController {
         model.addAttribute("accidents", simpleAccidentService.findAll());
         return "index";
     }
-
 }
