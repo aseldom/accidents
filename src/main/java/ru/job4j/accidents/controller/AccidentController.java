@@ -8,11 +8,10 @@ import ru.job4j.accidents.model.Accident;
 import ru.job4j.accidents.model.AccidentType;
 import ru.job4j.accidents.model.Rule;
 import ru.job4j.accidents.service.SimpleAccidentService;
+import ru.job4j.accidents.service.SimpleAccidentTypeService;
+import ru.job4j.accidents.service.SimpleRuleService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @AllArgsConstructor
@@ -20,22 +19,17 @@ import java.util.Set;
 public class AccidentController {
 
     private final SimpleAccidentService simpleAccidentService;
+    private final SimpleAccidentTypeService simpleAccidentTypeService;
+    private final SimpleRuleService simpleRuleService;
 
     /**
      * Страница создания инцидента
      */
-    @GetMapping("createAccident")
+    @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
-        List<AccidentType> types = new ArrayList<>();
-        types.add(new AccidentType(1, "Две машины"));
-        types.add(new AccidentType(2, "Машина и человек"));
-        types.add(new AccidentType(3, "Машина и велосипед"));
+        Collection<AccidentType> types = simpleAccidentTypeService.findAll();
         model.addAttribute("types", types);
-        List<Rule> rules = List.of(
-                new Rule(1, "Статья. 1"),
-                new Rule(2, "Статья. 2"),
-                new Rule(3, "Статья. 3")
-        );
+        Collection<Rule> rules = simpleRuleService.findAll();
         model.addAttribute("rules", rules);
         return "accidents/createAccident";
     }
@@ -43,7 +37,7 @@ public class AccidentController {
     /**
      * Сохранение созданного инцидента
      */
-    @PostMapping("saveAccident")
+    @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, @RequestParam(required = false) Set<Integer> rIds, Model model) {
         if (simpleAccidentService.add(accident) == null) {
             model.addAttribute("message", "Инцидент добавить не удалось");
@@ -55,7 +49,7 @@ public class AccidentController {
     /**
      * Страница редактирования инцидента
      */
-    @GetMapping("formUpdateAccident")
+    @GetMapping("/formUpdateAccident")
     public String update(@RequestParam int id, Model model) {
         Optional<Accident> optionalAccident = simpleAccidentService.findById(id);
         if (optionalAccident.isEmpty()) {
@@ -69,7 +63,7 @@ public class AccidentController {
     /**
      * Обновление отредактированного инцидента
      */
-    @PostMapping("updateAccident")
+    @PostMapping("/updateAccident")
     public String update(@ModelAttribute Accident accident, Model model) {
         if (!simpleAccidentService.update(accident)) {
             model.addAttribute("message", "Инцидент с указанным идентификатором изменить не удалось");
