@@ -3,5 +3,5 @@ create table accidents (
   name text,
   text text,
   address text,
-  type_id int references types(id)
+  type_id int not null references types(id)
 );
