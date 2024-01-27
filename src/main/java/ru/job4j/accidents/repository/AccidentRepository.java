@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface AccidentRepository {
 
-    Accident add(Accident accident);
+    Optional<Accident> add(Accident accident);
 
     boolean update(Accident accident);
 

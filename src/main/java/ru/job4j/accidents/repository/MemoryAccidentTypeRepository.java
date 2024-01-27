@@ -21,7 +21,6 @@ public class MemoryAccidentTypeRepository implements AccidentTypeRepository {
         add(new AccidentType(3, "Машина и велосипед"));
     }
 
-    @Override
     public AccidentType add(AccidentType accidentType) {
         accidentType.setId(atomicInt.getAndIncrement());
         types.putIfAbsent(accidentType.getId(), accidentType);
@@ -36,16 +35,6 @@ public class MemoryAccidentTypeRepository implements AccidentTypeRepository {
     @Override
     public Optional<AccidentType> findById(int id) {
         return Optional.ofNullable(types.get(id));
-    }
-
-    @Override
-    public boolean update(AccidentType accidentType) {
-        return types.computeIfPresent(accidentType.getId(), (id, oldAccident) ->
-                new AccidentType(
-                        oldAccident.getId(),
-                        accidentType.getName()
-                )
-        ) != null;
     }
 
 }

@@ -19,7 +19,7 @@ public class SimpleAccidentService implements AccidentService {
     private final SimpleAccidentTypeService simpleAccidentTypeService;
 
     @Override
-    public Accident add(Accident accident) {
+    public Optional<Accident> add(Accident accident) {
         return accidentRepository.add(accident);
     }
 
@@ -28,7 +28,8 @@ public class SimpleAccidentService implements AccidentService {
         accident.setType(simpleAccidentTypeService.findById(accident.getType().getId()).get());
         accident.setRules(new HashSet<>(simpleRuleService.findAllByIds(rIds))
         );
-        return accidentRepository.update(accident) || add(accident) != null;
+        return accidentRepository.findById(accident.getId()).isPresent()
+                ? accidentRepository.update(accident) : add(accident).isPresent();
     }
 
     @Override

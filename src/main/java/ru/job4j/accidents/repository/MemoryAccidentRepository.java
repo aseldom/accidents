@@ -4,9 +4,9 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.accidents.model.Accident;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -21,33 +21,23 @@ public class MemoryAccidentRepository implements AccidentRepository {
         MemoryAccidentTypeRepository memoryAccidentTypeRepository = new MemoryAccidentTypeRepository();
         add(new Accident(1, "Name 1", "Text 1", "Address 1",
                 memoryAccidentTypeRepository.findById(1).get(),
-                Set.of(memoryRuleRepository.findById(1).get())));
+                new HashSet<>(memoryRuleRepository.findAllByIds(new HashSet<>(1)))));
         add(new Accident(1, "Name 2", "Text 2", "Address 2",
                 memoryAccidentTypeRepository.findById(1).get(),
-                Set.of(memoryRuleRepository.findById(1).get())));
+                new HashSet<>(memoryRuleRepository.findAllByIds(new HashSet<>(1)))));
         add(new Accident(1, "Name 3", "Text 3", "Address 3",
                 memoryAccidentTypeRepository.findById(1).get(),
-                Set.of(memoryRuleRepository.findById(1).get())));
+                new HashSet<>(memoryRuleRepository.findAllByIds(new HashSet<>(1)))));
         add(new Accident(1, "Name 4", "Text 4", "Address 4",
                 memoryAccidentTypeRepository.findById(1).get(),
-                Set.of(memoryRuleRepository.findById(1).get())));
+                new HashSet<>(memoryRuleRepository.findAllByIds(new HashSet<>(1)))));
     }
 
     @Override
-    public Accident add(Accident accident) {
+    public Optional<Accident> add(Accident accident) {
         accident.setId(atomicInt.getAndIncrement());
         accidents.putIfAbsent(accident.getId(), accident);
-        return accident;
-    }
-
-    @Override
-    public Collection<Accident> findAll() {
-        return accidents.values();
-    }
-
-    @Override
-    public Optional<Accident> findById(int id) {
-        return Optional.ofNullable(accidents.get(id));
+        return Optional.of(accident);
     }
 
     @Override
@@ -62,6 +52,16 @@ public class MemoryAccidentRepository implements AccidentRepository {
                         accident.getRules()
                 )
         ) != null;
+    }
+
+    @Override
+    public Collection<Accident> findAll() {
+        return accidents.values();
+    }
+
+    @Override
+    public Optional<Accident> findById(int id) {
+        return Optional.ofNullable(accidents.get(id));
     }
 
 }

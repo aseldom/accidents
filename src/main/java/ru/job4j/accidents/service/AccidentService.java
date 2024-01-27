@@ -8,7 +8,7 @@ import java.util.Set;
 
 public interface AccidentService {
 
-    Accident add(Accident accident);
+    Optional<Accident> add(Accident accident);
 
     boolean update(Accident accident, Set<Integer> rIds);
 

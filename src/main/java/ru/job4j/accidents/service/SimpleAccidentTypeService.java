@@ -3,7 +3,7 @@ package ru.job4j.accidents.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.AccidentType;
-import ru.job4j.accidents.repository.MemoryAccidentTypeRepository;
+import ru.job4j.accidents.repository.AccidentTypeRepository;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -12,26 +12,16 @@ import java.util.Optional;
 @AllArgsConstructor
 public class SimpleAccidentTypeService implements AccidentTypeService {
 
-    private MemoryAccidentTypeRepository memoryAccidentTypeRepository;
-
-    @Override
-    public AccidentType add(AccidentType accidentType) {
-        return memoryAccidentTypeRepository.add(accidentType);
-    }
-
-    @Override
-    public boolean update(AccidentType accidentType) {
-        return memoryAccidentTypeRepository.update(accidentType);
-    }
+    private AccidentTypeRepository accidentTypeRepository;
 
     @Override
     public Optional<AccidentType> findById(int id) {
-        return memoryAccidentTypeRepository.findById(id);
+        return accidentTypeRepository.findById(id);
     }
 
     @Override
     public Collection<AccidentType> findAll() {
-        return memoryAccidentTypeRepository.findAll();
+        return accidentTypeRepository.findAll();
     }
 
 }

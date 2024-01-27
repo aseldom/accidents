@@ -7,10 +7,6 @@ import java.util.Optional;
 
 public interface AccidentTypeService {
 
-    AccidentType add(AccidentType accidentType);
-
-    boolean update(AccidentType accidentType);
-
     Optional<AccidentType> findById(int id);
 
     Collection<AccidentType> findAll();
