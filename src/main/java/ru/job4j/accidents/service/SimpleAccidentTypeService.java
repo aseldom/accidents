@@ -12,7 +12,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class SimpleAccidentTypeService implements AccidentTypeService {
 
-    private AccidentTypeRepository accidentTypeRepository;
+    private final AccidentTypeRepository accidentTypeRepository;
 
     @Override
     public Optional<AccidentType> findById(int id) {

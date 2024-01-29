@@ -25,11 +25,11 @@ public class Accident {
     private String text;
     private String address;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "type_id")
     private AccidentType type;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(
             name = "accidents_rules",
             joinColumns = { @JoinColumn(name = "accidents_id") },

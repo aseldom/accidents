@@ -12,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class SimpleRuleService implements RuleService {
 
-    private RuleRepository ruleRepository;
+    private final RuleRepository ruleRepository;
 
     @Override
     public Collection<Rule> findAll() {
