@@ -17,18 +17,20 @@ public class SimpleDataRuleService implements RuleService {
 
     private final DataRuleRepository dataRuleRepository;
 
-    @Override
-    public Collection<Rule> findAll() {
+    private Collection<Rule> getCollection(Iterable<Rule> iterable) {
         Collection<Rule> collection = new ArrayList<>();
-        dataRuleRepository.findAll().forEach(collection::add);
+        iterable.forEach(collection::add);
         return collection;
     }
 
     @Override
+    public Collection<Rule> findAll() {
+        return getCollection(dataRuleRepository.findAll());
+    }
+
+    @Override
     public Collection<Rule> findAllByIds(Set<Integer> ids) {
-        Collection<Rule> collection = new ArrayList<>();
-        dataRuleRepository.findAllById(ids).forEach(collection::add);
-        return collection;
+        return getCollection(dataRuleRepository.findAllById(ids));
     }
 
 }
