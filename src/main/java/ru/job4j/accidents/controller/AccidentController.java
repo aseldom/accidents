@@ -1,12 +1,13 @@
 package ru.job4j.accidents.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.accidents.model.Accident;
-import ru.job4j.accidents.service.*;
+import ru.job4j.accidents.service.AccidentService;
+import ru.job4j.accidents.service.AccidentTypeService;
+import ru.job4j.accidents.service.RuleService;
 
 import java.util.Optional;
 import java.util.Set;
@@ -27,7 +28,6 @@ public class AccidentController {
     public String viewCreateAccident(Model model) {
         model.addAttribute("types", accidentTypeService.findAll());
         model.addAttribute("rules", ruleService.findAll());
-        model.addAttribute("user", getUser());
         return "accidents/createAccident";
     }
 
@@ -39,13 +39,11 @@ public class AccidentController {
         Optional<Accident> optionalAccident = accidentService.findById(id);
         if (optionalAccident.isEmpty()) {
             model.addAttribute("message", "Инцидент не найден");
-            model.addAttribute("user", getUser());
             return "errors/404";
         }
         model.addAttribute("accident", optionalAccident.get());
         model.addAttribute("types", accidentTypeService.findAll());
         model.addAttribute("rules", ruleService.findAll());
-        model.addAttribute("user", getUser());
         return "accidents/editAccident";
     }
 
@@ -56,14 +54,9 @@ public class AccidentController {
     public String save(@ModelAttribute Accident accident, @RequestParam(required = false) Set<Integer> rIds, Model model) {
         if (!accidentService.update(accident, rIds)) {
             model.addAttribute("message", "Инцидент добавить/изменить не удалось");
-            model.addAttribute("user", getUser());
             return "errors/404";
         }
         return "redirect:/index";
-    }
-
-    private Object getUser() {
-        return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }
