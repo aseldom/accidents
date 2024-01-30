@@ -40,9 +40,7 @@ public class SimpleDataAccidentService implements AccidentService {
 
     @Override
     public Collection<Accident> findAll() {
-        Collection<Accident> collection = new ArrayList<>();
-        accidentDataRepository.findAll().forEach(collection::add);
-        return collection;
+        return accidentDataRepository.findAll();
     }
 
 }

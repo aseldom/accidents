@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.job4j.accidents.model.AccidentType;
 import ru.job4j.accidents.repository.AccidentDataTypeRepository;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -24,9 +23,7 @@ public class SimpleAccidentDataTypeService implements AccidentTypeService {
 
     @Override
     public Collection<AccidentType> findAll() {
-        Collection<AccidentType> collection = new ArrayList<>();
-        accidentDataTypeRepository.findAll().forEach(collection::add);
-        return collection;
+        return accidentDataTypeRepository.findAll();
     }
 
 }
