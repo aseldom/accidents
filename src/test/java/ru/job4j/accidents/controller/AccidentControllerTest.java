@@ -11,8 +11,7 @@ import ru.job4j.accidents.model.AccidentType;
 import ru.job4j.accidents.model.Rule;
 import ru.job4j.accidents.service.AccidentService;
 
-import java.util.List;
-
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,22 +28,21 @@ public class AccidentControllerTest {
     @Test
     @WithMockUser
     public void shouldReturnCreateAccidentMessage() throws Exception {
-        var expectedTypes = List.of(
-                new AccidentType(1, "Две машины"),
-                new AccidentType(2, "Машина и человек"),
-                new AccidentType(3, "Машина и велосипед")
-        );
-        var expectedRules = List.of(
-                new Rule(1, "Статья. 1"),
-                new Rule(2, "Статья. 2"),
-                new Rule(3, "Статья. 3")
-        );
         this.mockMvc.perform(get("/accidents/createAccident"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("accidents/createAccident"))
-                .andExpect(model().attribute("rules", expectedRules))
-                .andExpect(model().attribute("types", expectedTypes));
+                .andExpect(model().attribute("rules", containsInAnyOrder(
+                        new Rule(1, "Статья. 1"),
+                        new Rule(2, "Статья. 2"),
+                        new Rule(3, "Статья. 3")
+                )))
+                .andExpect(model().attribute("types", containsInAnyOrder(
+                        new AccidentType(1, "Две машины"),
+                        new AccidentType(2, "Машина и человек"),
+                        new AccidentType(3, "Машина и велосипед")
+
+                )));
     }
 
     @Test

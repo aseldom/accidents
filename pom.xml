@@ -212,9 +212,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.5</version>
                 <configuration>
-                    <skipTests>false</skipTests>
+                    <systemPropertyVariables>
+                        <spring.main.banner-mode>off</spring.main.banner-mode>
+                        <logging.level.root>INFO</logging.level.root>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
