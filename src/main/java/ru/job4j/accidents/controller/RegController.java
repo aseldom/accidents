@@ -18,7 +18,7 @@ public class RegController {
     @PostMapping("/reg")
     public String regSave(@ModelAttribute User user, Model model) {
         if (userService.add(user).isEmpty()) {
-            model.addAttribute("message", "Пользователь с такой почтой уже существует");
+            model.addAttribute("message", "Пользователь с таким логином уже существует");
             return "errors/404";
         }
         return "redirect:/login";
